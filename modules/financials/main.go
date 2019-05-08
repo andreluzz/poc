@@ -1,10 +1,10 @@
 package main
 
 import (
-	"github.com/poc/modules"
-	"github.com/poc/modules/financials/routes"
+	"github.com/andreluzz/poc/modules/financials/routes"
+	module "github.com/andreluzz/poc/modules/shared"
 )
 
 func main() {
-	modules.ListenAndServe(":3040", "../../cert.pem", "../../key.pem", routes.Routes())
+	module.ListenAndServe(":3040", "../../cert.pem", "../../key.pem", routes.Routes())
 }

@@ -16,7 +16,7 @@ func Routes() *chi.Mux {
 		render.Status(r, http.StatusOK)
 		response := shared.Response{}
 		response.Code = http.StatusOK
-		response.Data = "Financials Service - Response"
+		response.Data = "Tasks Service - Response"
 		render.JSON(rw, r, response)
 	})
 	return r

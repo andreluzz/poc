@@ -1,4 +1,4 @@
-package service
+package shared
 
 //Metadata defines metadata on the response
 type Metadata struct {

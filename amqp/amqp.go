@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"time"
 
 	"github.com/streadway/amqp"
 )
@@ -23,6 +24,7 @@ type Message struct {
 	ReplyTo    string
 	ID         string
 	Parameters map[string]interface{}
+	CreatedAt  time.Time
 }
 
 //Parse returns a message from a byte array
@@ -53,6 +55,7 @@ func (queue *Queue) Push(message Message) error {
 	if !queue.isReady {
 		return errors.New("Queue not ready")
 	}
+	message.CreatedAt = time.Now()
 	return queue.channel.Publish(
 		"",            // Exchange
 		message.Queue, // Routing key
@@ -73,7 +76,7 @@ func (queue *Queue) Stream() (<-chan amqp.Delivery, error) {
 	if !queue.isReady {
 		return nil, errors.New("Queue not ready")
 	}
-	fmt.Printf("Ready to start processing queue: %s ...", queue.name)
+	fmt.Printf("Ready to start processing queue: %s ...\n", queue.name)
 	return queue.channel.Consume(
 		queue.name,
 		"",    // Consumer
