@@ -39,10 +39,10 @@ func main() {
 				return
 			}
 			defer resp.Body.Close()
-			rw.Header().Set("Content-Type", resp.Header.Get("Content-Type"))
-			rw.Header().Set("Content-Length", resp.Header.Get("Content-Length"))
-			rw.Header().Set("Content-Encoding", resp.Header.Get("Content-Encoding"))
-			//TODO get all response header contents
+			for name, values := range resp.Header {
+				rw.Header()[name] = values
+			}
+			rw.WriteHeader(resp.StatusCode)
 			io.Copy(rw, resp.Body)
 		})
 	})
