@@ -11,8 +11,8 @@ import (
 	"os/signal"
 	"time"
 
+	"github.com/andreluzz/poc/api/services"
 	"github.com/go-chi/chi"
-	"github.com/poc/api/services"
 )
 
 var (
@@ -41,6 +41,8 @@ func main() {
 			defer resp.Body.Close()
 			rw.Header().Set("Content-Type", resp.Header.Get("Content-Type"))
 			rw.Header().Set("Content-Length", resp.Header.Get("Content-Length"))
+			rw.Header().Set("Content-Encoding", resp.Header.Get("Content-Encoding"))
+			//TODO get all response header contents
 			io.Copy(rw, resp.Body)
 		})
 	})

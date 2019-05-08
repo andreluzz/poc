@@ -18,10 +18,12 @@ import (
 
 var (
 	addr = flag.String("port", "", "TCP port to listen to")
+	cert = flag.String("cert", "../../cert.pem", "Path to certification")
+	key  = flag.String("key", "../../key.pem", "Path to certification key")
 )
 
 //ListenAndServe default module api listen and server
-func ListenAndServe(port, certPath, keyPath string, moduleRouter *chi.Mux) {
+func ListenAndServe(port string, moduleRouter *chi.Mux) {
 	stopChan := make(chan os.Signal)
 	signal.Notify(stopChan, os.Interrupt)
 
@@ -33,7 +35,7 @@ func ListenAndServe(port, certPath, keyPath string, moduleRouter *chi.Mux) {
 		panic("Invalid module port")
 	}
 
-	caCert, err := ioutil.ReadFile(certPath)
+	caCert, err := ioutil.ReadFile(*cert)
 	if err != nil {
 		panic("Invalid service certificate")
 	}
@@ -67,7 +69,7 @@ func ListenAndServe(port, certPath, keyPath string, moduleRouter *chi.Mux) {
 
 	go func() {
 		fmt.Printf("Service listening on %s\n", port)
-		if err := srv.ListenAndServeTLS(certPath, keyPath); err != nil {
+		if err := srv.ListenAndServeTLS(*cert, *key); err != nil {
 			fmt.Printf("listen: %s\n", err)
 		}
 	}()

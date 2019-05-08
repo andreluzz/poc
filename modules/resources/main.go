@@ -6,5 +6,5 @@ import (
 )
 
 func main() {
-	module.ListenAndServe(":3030", "../../cert.pem", "../../key.pem", routes.Routes())
+	module.ListenAndServe(":3030", routes.Routes())
 }

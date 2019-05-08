@@ -26,6 +26,7 @@ type Job struct {
 func (j *Job) run() {
 	fmt.Printf("JOB: %s | Instance: %00d | processing > JOB Instance ID: %s\n", j.ServiceID, j.Instance, j.ID)
 	//TODO: Check and wait until JOB Instance is in created status
+	j.Start = time.Now()
 	j.Status = statusProcessing
 	//TODO: Update job instance on DB (status, service_id)
 	//TODO: Read tasks from database
@@ -48,7 +49,9 @@ func (j *Job) run() {
 
 	j.WG.Wait()
 
-	fmt.Printf("JOB: %s | Instance: %00d | Completed  > JOB Instance ID: %s\n", j.ServiceID, j.Instance, j.ID)
+	j.Finish = time.Now()
+	duration := time.Since(j.Start)
+	fmt.Printf("JOB: %s | Instance: %00d | Completed in %fs\n", j.ServiceID, j.Instance, duration.Seconds())
 }
 
 func (j *Job) work() {
@@ -82,7 +85,7 @@ func (j *Job) defineTasksToExecute(id, parentID string, sequence int) {
 	}
 
 	if sequenceCompleted {
-		fmt.Println("Sequence completed")
+		fmt.Printf("Sequence %d completed\n", sequence)
 		sequence++
 	}
 

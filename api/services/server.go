@@ -21,7 +21,11 @@ func (s *Server) Request(client *http.Client, path, method string, header http.H
 		return nil, err
 	}
 	req.Header = header
-	return client.Do(req)
+	response, err := client.Do(req)
+
+	fmt.Println(response)
+
+	return response, err
 }
 
 //Ping check server is alive

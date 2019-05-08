@@ -11,8 +11,6 @@ import (
 type Service struct {
 	Name            string    `json:"name"`
 	Type            string    `json:"type"`
-	UP              bool      `json:"up"`
-	DownServers     int       `json:"downServers"`
 	Servers         []*Server `json:"servers" toml:"server"`
 	NextServerIndex int       `json:"nextServerIndex"`
 }
@@ -70,16 +68,10 @@ func (s *Service) Request(client *http.Client, path, method string, header http.
 }
 
 //Ping check service is alive
-func (s *Service) Ping(client *http.Client) bool {
-	serviceUP := false
+func (s *Service) Ping(client *http.Client) {
 	for i, server := range s.Servers {
-		serverUP := server.Ping(client)
-		s.Servers[i].UP = serverUP
-		if serverUP {
-			serviceUP = true
-		}
+		s.Servers[i].UP = server.Ping(client)
 	}
-	return serviceUP
 }
 
 //PingDownServers ping down servers from this service

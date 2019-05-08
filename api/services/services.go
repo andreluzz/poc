@@ -37,8 +37,8 @@ func (s *Services) Load(verbose bool) error {
 		panic("Invalid services file")
 	}
 
-	for i, service := range s.List {
-		s.List[i].UP = service.Ping(s.Client)
+	for _, service := range s.List {
+		service.Ping(s.Client)
 		if verbose {
 			fmt.Printf("%s\n", service.Name)
 			for _, server := range service.Servers {
